@@ -1,0 +1,12 @@
+# 阿里云函数计算 Custom Runtime 的 Python 依赖
+# 部署 FC 时会被 bootstrap 自动安装
+#
+# 注意：
+#   1) Custom Runtime 自带 Python 标准库（包括 http.server），
+#      所以 server.py 的 ThreadingHTTPServer 不需要额外依赖
+#   2) cryptography 只在 PAY_PROVIDER=wechat/alipay 时才需要，
+#      mock 渠道完全不依赖它。部署时按需添加。
+#
+# 当前 mock 渠道 → 留空即可，bootstrap 也不会尝试安装任何东西
+
+# cryptography>=42.0   # 微信/支付宝真实支付渠道才需要

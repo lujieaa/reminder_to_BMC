@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/supportprompt">
+        <file alias="prompts_zh.json">prompts_zh.json</file>
+        <file alias="coffee_icon.jpg">coffee_icon.jpg</file>
+    </qresource>
+</RCC>

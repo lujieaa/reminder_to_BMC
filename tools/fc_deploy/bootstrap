@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# -*- coding: utf-8 -*-
+# 阿里云函数计算 Custom Runtime 启动脚本
+#
+# FC 平台会：
+#   1. 解压你的代码包
+#   2. 执行本脚本（前台运行，不能 daemonize）
+#   3. 把 HTTP 请求转发到你监听的端口
+#
+# 本脚本做 3 件事：
+#   a) 找 Python 解释器（优先 python3）
+#   b) 设置默认环境变量
+#   c) 前台启动后端 HTTP 服务
+
+set -e
+
+HERE="$(cd "$(dirname "$0")" && pwd)"
+cd "$HERE"
+
+# --- Python 解释器探测 ---
+if command -v python3 >/dev/null 2>&1; then
+    PY="python3"
+elif command -v python >/dev/null 2>&1; then
+    PY="python"
+else
+    echo "[bootstrap] 找不到 python3 或 python，FC Custom Runtime 至少需要 Python 3.9" >&2
+    exit 1
+fi
+
+# --- 默认环境变量（FC 会自动注入 PORT / FC_LISTEN_PORT 等） ---
+export PAY_PROVIDER="${PAY_PROVIDER:-mock}"
+export SNAPSHOT_PATH="${SNAPSHOT_PATH:-/tmp/support_sessions.json}"
+export PAYMENT_QR_IMAGE_PATH="${PAYMENT_QR_IMAGE_PATH:-$HERE/payment_qr.png}"
+
+# Custom Runtime 可能不自动注入 PORT，兜底用 FC_LISTEN_PORT
+if [ -z "$PORT" ] && [ -n "$FC_LISTEN_PORT" ]; then
+    export PORT="$FC_LISTEN_PORT"
+fi
+export PORT="${PORT:-9000}"
+
+# --- 依赖安装（如果 requirements.txt 存在且没装过） ---
+if [ -f requirements.txt ] && [ ! -d .deps_installed ]; then
+    echo "[bootstrap] 安装 Python 依赖..."
+    "$PY" -m pip install --target "$HERE/backend_deps" -r requirements.txt --quiet || true
+    touch .deps_installed
+fi
+
+if [ -d "$HERE/backend_deps" ]; then
+    export PYTHONPATH="$HERE/backend_deps:$PYTHONPATH"
+fi
+
+# --- 启动后端（前台，不守护） ---
+# server.py 的 main() 会读 BackendConfig.from_env() → 自动取 PORT
+# 用 PYTHONPATH 把 $HERE 加入模块搜索路径，让 backend 包能被找到
+export PYTHONPATH="$HERE:${PYTHONPATH:-}"
+echo "[bootstrap] 启动后端服务, PAY_PROVIDER=$PAY_PROVIDER, PORT=$PORT, SNAPSHOT_PATH=$SNAPSHOT_PATH"
+exec "$PY" -m backend.server

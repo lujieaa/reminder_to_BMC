@@ -1,0 +1,78 @@
+# =====================
+# CMake / C++ 构建产物
+# =====================
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+*.exe
+*.so
+*.dylib
+
+# =====================
+# Qt 自动生成 / 用户配置
+# =====================
+*.moc
+moc_*.cpp
+moc_*.h
+ui_*.h
+qrc_*.cpp
+*.qm
+*.prl
+*.debug
+*.autosave
+/.qmake.cache
+/.qmake.stash
+*.pro.user*
+CMakeLists.txt.user*
+compile_commands.json
+
+# =====================
+# Python
+# =====================
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+.Python
+.venv/
+venv/
+.winvenv/
+env/
+ENV/
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# =====================
+# IDE / 编辑器
+# =====================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# =====================
+# 操作系统杂项
+# =====================
+.DS_Store
+Thumbs.db
+
+# =====================
+# 项目本地临时目录
+# =====================
+.screenshots/
+tools/output/
+tools/tmp/
+dist/
+*.egg-info/

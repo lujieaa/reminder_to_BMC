@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "support-prompt"
+version = "1.0.0"
+description = "可复用的处理成功后评价/赞助弹窗桌面模块（PySide6 版）"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "lujieaa", email = "281299956@qq.com" }]
+keywords = ["pyside6", "qt", "dialog", "support", "reminder", "buymeacoffee"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Environment :: X11 Applications :: Qt",
+]
+dependencies = [
+    "PySide6>=6.5",
+    "qrcode[pil]>=7.4",
+]
+
+[project.urls]
+Homepage = "https://github.com/lujieaa/remender_to_BMC"
+Repository = "https://github.com/lujieaa/remender_to_BMC.git"
+
+# setuptools 配置：源码包在 python/ 目录下
+[tool.setuptools]
+package-dir = { "" = "python" }
+
+[tool.setuptools.packages.find]
+where = ["python"]
+include = ["support_prompt*"]
+
+# 随包分发的资源文件（文案 + 图标）
+[tool.setuptools.package-data]
+support_prompt = ["prompts_zh.json", "coffee_icon.jpg"]
