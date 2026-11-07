@@ -71,17 +71,17 @@ POST /admin/reject?sid=...    # 收款方确认未收到款 → verify 返回 st
 
 ## 快速开始（Python 版）
 
+本项目已配置 `pyproject.toml`，可作为独立包安装使用：
+
 ```bash
-pip install -r requirements.txt
+# 方式一：从本地源码安装（开发/联调）
+pip install -e .
 
-# 终端 1：启动联调用 mock 后端（不可用于生产）
-python tools/mock_backend.py
-
-# 终端 2：运行演示
-python python/demo_support_prompt.py
+# 方式二：从 Git 仓库安装（宿主项目引用）
+pip install git+https://github.com/lujieaa/reminder_to_BMC.git
 ```
 
-集成到宿主项目：
+安装后即可直接 import，无需手动处理路径：
 
 ```python
 from support_prompt import SupportPrompt, SupportConfig
@@ -94,6 +94,18 @@ cfg = SupportConfig(
 )
 prompt = SupportPrompt(cfg, parent=main_window)
 prompt.on_process_success()                     # 每次处理成功后调用
+```
+
+本地联调（不安装，直接跑 demo）：
+
+```bash
+pip install -r requirements.txt
+
+# 终端 1：启动联调用 mock 后端（不可用于生产）
+python tools/mock_backend.py
+
+# 终端 2：运行演示
+python python/demo_support_prompt.py
 ```
 
 ## 构建（C++ 版，需要 Qt SDK）
